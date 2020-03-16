@@ -5,15 +5,31 @@ import threading
 
 
 def compute_height(n, parents):
-    # Replace this code with a faster implementation
+    root = 0
+    tree = {}
     max_height = 0
-    for vertex in range(n):
-        height = 0
-        current = vertex
-        while current != -1:
-            height += 1
-            current = parents[current]
-        max_height = max(max_height, height)
+    for index, parent in enumerate(parents):
+        if parent == -1:
+            root = index
+        elif parent in tree.keys():
+            tree[parent].append(index)
+        else:
+            tree[parent] = [index]
+    stack = [(1, tree[root])]
+
+    while len(stack) > 0:
+        height, item = stack[-1]
+        if len(item) == 0:
+            stack.pop()
+        else:
+            max_height = max(max_height, height)
+            child = item.pop()
+
+            if child in tree.keys():
+                stack.append((height + 1, tree[child]))
+            else:
+                max_height = max(max_height, height + 1)
+
     return max_height
 
 
@@ -23,9 +39,5 @@ def main():
     print(compute_height(n, parents))
 
 
-# In Python, the default limit on recursion depth is rather low,
-# so raise it here for this problem. Note that to take advantage
-# of bigger stack, we have to launch the computation in a new thread.
-sys.setrecursionlimit(10**7)  # max depth of recursion
-threading.stack_size(2**27)   # new thread will get stack of such size
-threading.Thread(target=main).start()
+if __name__ == "__main__":
+    main()
