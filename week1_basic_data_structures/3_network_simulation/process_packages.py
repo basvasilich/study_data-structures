@@ -1,6 +1,7 @@
 # python3
 
 from collections import namedtuple
+from collections import deque
 
 Request = namedtuple("Request", ["arrived_at", "time_to_process"])
 Response = namedtuple("Response", ["was_dropped", "started_at"])
@@ -9,10 +10,19 @@ Response = namedtuple("Response", ["was_dropped", "started_at"])
 class Buffer:
     def __init__(self, size):
         self.size = size
-        self.finish_time = []
+        self.finish_time = deque()
 
     def process(self, request):
-        # write your code here
+        arrived_at, time_to_process = request
+
+        while len(self.finish_time) > 0 and self.finish_time[0] <= arrived_at:
+            self.finish_time.popleft()
+
+        if len(self.finish_time) < self.size:
+            start_at = self.finish_time[-1] if len(self.finish_time) > 0 else arrived_at
+            self.finish_time.append(start_at + time_to_process)
+            return Response(False, start_at)
+
         return Response(False, -1)
 
 

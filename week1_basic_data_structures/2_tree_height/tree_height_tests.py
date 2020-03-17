@@ -10,7 +10,7 @@ class TestCheckBrackets(unittest.TestCase):
 
         for args, answer in test_data:
             n, parents = args
-            self.assertEqual(compute_height(int(n), [int(i) for i in parents.split()]), int(answer))
+            self.assertEqual(compute_height(int(n), [int(i) for i in parents.split()]), int(answer[0]))
 
     if __name__ == '__main__':
         unittest.main()

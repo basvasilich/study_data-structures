@@ -9,7 +9,7 @@ class TestCheckBrackets(unittest.TestCase):
         test_data = test_runner('./tests')
 
         for args, answer in test_data:
-            self.assertEqual(find_mismatch(*args), answer if answer == 'Success' else int(answer))
+            self.assertEqual(find_mismatch(*args), answer if answer == 'Success' else int(answer[0]))
 
 
 if __name__ == '__main__':
